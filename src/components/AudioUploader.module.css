@@ -1,0 +1,28 @@
+.audioUploader {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 400px;
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.text {
+  text-align: center;
+  color: #2034b3;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.button {
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
