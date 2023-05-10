@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import * as Tone from 'tone';
+import { TransportTime } from 'tone/build/esm/core/type/Units';
 
 type PlayerProps = {
     onAudioSelected: (audioBuffer: AudioBuffer | undefined) => void,
@@ -9,8 +10,7 @@ type PlayerProps = {
 function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
     const [player, setPlayer] = useState<Tone.Player | null>(null);
     const [state, setState] = useState<'playing' | 'paused' | 'stopped'>('stopped');
-    const [currentTime, setCurrentTime] = useState(0);
-    const [startPosition, setStartPosition] = useState(0);
+    const [offset, setOffset] = useState<TransportTime>(0);
 
     // Set Audio Buffer into Player if Audio Buffer changes
     useEffect(() => { handleAudioSelected() }, [audioBuffer]);
@@ -20,49 +20,48 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
         if (audioBuffer !== undefined) {
             Tone.start();
             const newPlayer = new Tone.Player(audioBuffer).toDestination();
+            newPlayer.sync().start();
             setPlayer(newPlayer);
             setState('stopped');
-            setCurrentTime(0);
+            onAudioSelected(audioBuffer);
         } else {
             setPlayer(null);
             setState('stopped');
-            setCurrentTime(0);
         }
     };
 
     const handlePlayButtonClick = () => {
         if (player !== null) {
-            player.start(undefined, currentTime);
+            Tone.Transport.start(undefined, offset);
             setState('playing');
         }
     };
 
     const handleStopButtonClick = () => {
       if (player !== null) {
-        player.stop();
+        Tone.Transport.stop();
+        setOffset(0);
         setState('stopped');
-        setCurrentTime(0);
       }
     };
 
     const handlePauseButtonClick = () => {
         if (player !== null && state === 'playing') {
-            setCurrentTime(player.toSeconds());
-            console.log(currentTime);
-            player.stop();
+            Tone.Transport.pause();
+            setOffset(Tone.Transport.seconds);
             setState('paused');
         }
     };
 
     const handleRemoveClick = () => {
-        onAudioSelected(undefined);
         if (player !== null) {
-            player.stop();
-            player.dispose();
+            Tone.Transport.stop();
+            Tone.Transport.dispose();
+            setOffset(0);
             setPlayer(null);
             setState('stopped');
-            setCurrentTime(0);
-        }
+            onAudioSelected(undefined);
+          }
     };
 
     return (
