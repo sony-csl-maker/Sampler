@@ -15,6 +15,8 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
     // Set Audio Buffer into Player if Audio Buffer changes
     useEffect(() => { handleAudioSelected();
                        }, [audioBuffer]);
+    
+    // Set Waveform into Player if Player changes
     useEffect(() => {
             if (player === null)
                 return;
@@ -32,10 +34,8 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
 
             if (newPlayer.loaded) {
                 setPlayer(newPlayer);
-                newPlayer.sync().start();
                 setState('stopped');
                 onAudioSelected(audioBuffer);
-                console.log('loaded');
             }
         } else {
             setPlayer(null);
@@ -43,9 +43,11 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
         }
     };
 
+    // Play, Pause, Stop, Remove audio
     const handlePlayButtonClick = () => {
         if (player !== null && state !== 'playing') {
             Tone.Transport.start(undefined, offset);
+            player.start(undefined, offset);
             setState('playing');
         }
     };
@@ -53,6 +55,7 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
     const handleStopButtonClick = () => {
       if (player !== null) {
         Tone.Transport.stop();
+        player.stop();
         setOffset(0);
         setState('stopped');
       }
@@ -60,21 +63,22 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
 
     const handlePauseButtonClick = () => {
         if (player !== null && state === 'playing') {
-            Tone.Transport.pause();
+            player.stop();
             setOffset(Tone.Transport.seconds);
+            Tone.Transport.pause();
             setState('paused');
         }
     };
 
     const handleRemoveClick = () => {
         if (player !== null) {
-            // Tone.Transport.stop();
-            // Tone.Transport.dispose();
-            // setOffset(0);
-            // setPlayer(null);
-            // setState('stopped');
-            // onAudioSelected(undefined);
-            console.log(Tone.Transport.seconds)
+            player.stop();
+            Tone.Transport.stop();
+            player.dispose();
+            setOffset(0);
+            setPlayer(null);
+            setState('stopped');
+            onAudioSelected(undefined);
           }
     };
 
