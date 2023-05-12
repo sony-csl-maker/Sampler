@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import * as Tone from 'tone';
-import { TransportTime } from 'tone/build/esm/core/type/Units';
 
 type PlayerProps = {
     onAudioSelected: (audioBuffer: AudioBuffer | undefined) => void,
@@ -10,20 +9,34 @@ type PlayerProps = {
 function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
     const [player, setPlayer] = useState<Tone.Player | null>(null);
     const [state, setState] = useState<'playing' | 'paused' | 'stopped'>('stopped');
-    const [offset, setOffset] = useState<TransportTime>(0);
+    const [offset, setOffset] = useState<number>(0);
+    const [waveform, setWaveform] = useState<Tone.Waveform | null>(null);
 
     // Set Audio Buffer into Player if Audio Buffer changes
-    useEffect(() => { handleAudioSelected() }, [audioBuffer]);
+    useEffect(() => { handleAudioSelected();
+                       }, [audioBuffer]);
+    useEffect(() => {
+            if (player === null)
+                return;
+
+            const newWaveform = new Tone.Waveform(1024);
+            player.connect(newWaveform);
+            setWaveform(newWaveform);
+    }, [player]);
 
     // Set Audio Buffer into Player
     const handleAudioSelected = () => {
         if (audioBuffer !== undefined) {
             Tone.start();
             const newPlayer = new Tone.Player(audioBuffer).toDestination();
-            newPlayer.sync().start();
-            setPlayer(newPlayer);
-            setState('stopped');
-            onAudioSelected(audioBuffer);
+
+            if (newPlayer.loaded) {
+                setPlayer(newPlayer);
+                newPlayer.sync().start();
+                setState('stopped');
+                onAudioSelected(audioBuffer);
+                console.log('loaded');
+            }
         } else {
             setPlayer(null);
             setState('stopped');
@@ -31,7 +44,7 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
     };
 
     const handlePlayButtonClick = () => {
-        if (player !== null) {
+        if (player !== null && state !== 'playing') {
             Tone.Transport.start(undefined, offset);
             setState('playing');
         }
@@ -55,12 +68,13 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
 
     const handleRemoveClick = () => {
         if (player !== null) {
-            Tone.Transport.stop();
-            Tone.Transport.dispose();
-            setOffset(0);
-            setPlayer(null);
-            setState('stopped');
-            onAudioSelected(undefined);
+            // Tone.Transport.stop();
+            // Tone.Transport.dispose();
+            // setOffset(0);
+            // setPlayer(null);
+            // setState('stopped');
+            // onAudioSelected(undefined);
+            console.log(Tone.Transport.seconds)
           }
     };
 

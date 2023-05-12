@@ -7,14 +7,11 @@ import Player from './components/Player';
 
 function App() {
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | undefined>(undefined);
-  const getAudioBufferFromPlayer = (audioBuffer: AudioBuffer | undefined) => {
-    setAudioBuffer(audioBuffer);
-  }
 
   return (
     <div className="App">
       {audioBuffer ? (
-        <Player audioBuffer={audioBuffer} onAudioSelected={getAudioBufferFromPlayer} />
+        <Player audioBuffer={audioBuffer} onAudioSelected={setAudioBuffer} />
         ) : (
         <AudioUploader onAudioSelected={setAudioBuffer}/>)
       }
