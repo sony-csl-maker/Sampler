@@ -6,16 +6,16 @@
   align-items: center;
   height: 200px;
   width: 400px;
-  border: 2px dashed #ccc;
+  border: 2px dotted white;
   border-radius: 20px;
   cursor: pointer;
 }
 
 .text {
   text-align: center;
-  color: #2034b3;
+  color: rgb(203,205,209);
   font-weight: bold;
-  font-size: 18px;
+  font-size: 32px;
 }
 
 .button {

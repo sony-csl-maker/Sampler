@@ -10,11 +10,14 @@ function App() {
 
   return (
     <div className="App">
-      {audioBuffer ? (
-        <Player audioBuffer={audioBuffer} onAudioSelected={setAudioBuffer} />
-        ) : (
-        <AudioUploader onAudioSelected={setAudioBuffer}/>)
-      }
+      <div className="topHeader"> </div>
+        {
+            audioBuffer ? ( <div style={{ position: 'relative', marginTop: '300px'}}><Player audioBuffer={audioBuffer} onAudioSelected={setAudioBuffer}/> </div>) : (
+          <div style={{ position: 'relative', marginTop: '300px'}}>
+            <AudioUploader onAudioSelected={setAudioBuffer}/>
+          </div>)
+        }
+      <div className="botHeader"> </div>
     </div>
   );
 }
