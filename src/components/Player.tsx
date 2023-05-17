@@ -24,7 +24,24 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
             const newWaveform = new Tone.Waveform(1024);
             player.connect(newWaveform);
             setWaveform(newWaveform);
+
+        // Set up transport event to update offset in real-time
+        // return the event id so that it can be cancelled
+        Tone.Transport.scheduleRepeat(() => {
+            setOffset(Tone.Transport.seconds);
+        }, 0.1)
     }, [player]);
+
+    // Onstop event to handle end of audio playback
+    if (player !== null) {
+        player.onstop = () => {
+            if (offset >= player.buffer.duration) {
+                Tone.Transport.stop();
+                setOffset(0);
+                setState('stopped');
+            }
+        }
+    }
 
     // Set Audio Buffer into Player
     const handleAudioSelected = () => {
@@ -45,7 +62,10 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
 
     // Play, Pause, Stop, Remove audio
     const handlePlayButtonClick = () => {
-        if (player !== null && state !== 'playing') {
+        if (player === null)
+            return;
+        if (state !== 'playing') {
+            setOffset(Tone.Transport.seconds);
             Tone.Transport.start(undefined, offset);
             player.start(undefined, offset);
             setState('playing');
@@ -82,12 +102,24 @@ function Player({ onAudioSelected, audioBuffer }: PlayerProps) {
           }
     };
 
+    // Convert seconds to minutes:seconds format
+    const formatTime = (seconds: number) => {
+        if (isNaN(seconds)) {
+            return '0:00.0';
+        }
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        const remainingMilliseconds = Math.floor((seconds % 1) * 10);
+        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}.${remainingMilliseconds}`;
+    }
+
     return (
         <div>
             <button onClick={handlePlayButtonClick}>Play</button>
             <button onClick={handlePauseButtonClick}>Pause</button>
             <button onClick={handleStopButtonClick}>Stop</button>
             <button onClick={handleRemoveClick}>Remove</button>
+            <p>{formatTime(offset)}</p>
         </div>
     )
 }
