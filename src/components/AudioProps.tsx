@@ -1,15 +1,15 @@
 import * as Tone from 'tone';
 
-type audioProps = {
-    audioBuffer: AudioBuffer | undefined,
-    waveform: Tone.Waveform | undefined,
-    offset : number | undefined
-  };
+interface audioProps {
+    audioBuffer: AudioBuffer;
+    offset : number;
+    waveform: Tone.Waveform | null;
+};
 
-type audioPropsSetter = {
-    setAudioBuffer: (audioBuffer: AudioBuffer | undefined) => void,
-    setWaveform: (waveform: Tone.Waveform | undefined) => void,
-    setOffset: (offset: number | undefined) => void
+interface audioPropsSetter {
+    setOffset: React.Dispatch<React.SetStateAction<number>>;
+    setAudioBuffer: React.Dispatch<React.SetStateAction<AudioBuffer | undefined>>;
+    setWaveform: React.Dispatch<React.SetStateAction<Tone.Waveform | null>>;
 };
 
 export type { audioProps, audioPropsSetter };

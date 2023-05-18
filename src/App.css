@@ -27,3 +27,13 @@ body {
   color: white;
   font-size: 30px;
 }
+
+.audioPlayer {
+  position: 'relative';
+  margin-top: 300px;
+}
+
+.audioUploader {
+  position: 'relative';
+  margin-top: 300px;
+}
