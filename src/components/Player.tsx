@@ -110,10 +110,10 @@ function Player(props : audioProps & audioPropsSetter) {
 
     return (
         <div>
-            <button onClick={handlePlayButtonClick}>Play</button>
-            <button onClick={handlePauseButtonClick}>Pause</button>
-            <button onClick={handleStopButtonClick}>Stop</button>
-            <button onClick={handleRemoveClick}>Remove</button>
+            <button className={styles.buttonStyle} onClick={handlePlayButtonClick}>Play</button>
+            <button className={styles.buttonStyle} onClick={handlePauseButtonClick}>Pause</button>
+            <button className={styles.buttonStyle} onClick={handleStopButtonClick}>Stop</button>
+            <button className={styles.buttonStyle} onClick={handleRemoveClick}>Remove</button>
             <div className={styles.currentTime}>
                 <p>{formatTime(props.offset)}</p>
             </div>
