@@ -21,7 +21,7 @@ function AudioUploader({ onAudioSelected }: AudioUploaderProps) {
       reader.onload = async () => {
         const arrayBuffer = reader.result as ArrayBuffer;
         const audioBuffer = await Tone.context.decodeAudioData(arrayBuffer);
-        onAudioSelected(audioBuffer)
+        onAudioSelected(audioBuffer);
       };
       reader.readAsArrayBuffer(file);
     }

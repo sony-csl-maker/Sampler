@@ -6,13 +6,13 @@
 
 .buttonStyle {
   color: rgba(34,45,63,255);
-  font-size: 32px;
-  margin: 20px;
+  font-size: 20px;
+  margin: 10px;
   background-color: teal;
   border-color: rgba(19,28,43,255);
   border-radius: 15px;
   box-sizing: border-box;
-  padding: 25px;
+  padding: 10px;
   transition: background-color 0.3s ease;
 }
 

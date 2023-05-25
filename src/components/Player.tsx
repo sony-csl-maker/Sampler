@@ -10,7 +10,7 @@ function Player(props : audioProps & audioPropsSetter) {
     // Set Audio Buffer into Player if Audio Buffer changes
     useEffect(() => { handleAudioSelected();
                        }, [props.audioBuffer]);
-    
+
     // Set Waveform into Player if Player changes
     useEffect(() => {
             if (player === null)
@@ -20,11 +20,24 @@ function Player(props : audioProps & audioPropsSetter) {
             player.connect(newWaveform);
             props.setWaveform(newWaveform);
 
-        // Set up transport event to update offset in real-time
-        // return the event id so that it can be cancelled
-        Tone.Transport.scheduleRepeat(() => {
-            props.setOffset(Tone.Transport.seconds);
-        }, 0.01)
+            // Set up transport event to update offset in real-time
+            // return the event id so that it can be cancelled
+            Tone.Transport.scheduleRepeat(() => {
+                props.setOffset(Tone.Transport.seconds);
+            }, 0.01)
+
+            
+            // Set up envelope
+            props.setEnvelope(new Tone.AmplitudeEnvelope({
+                attack: 0.1,
+                decay: 0.2,
+                sustain: 0.1,
+                release: 0.8,
+            }).toDestination());
+
+            if (props.envelope !== null) {
+                player.connect(props.envelope);
+            }
     }, [player]);
 
     // Onstop event to handle end of audio playback
