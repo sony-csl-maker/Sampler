@@ -1,19 +1,24 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, useCallback, useMemo} from 'react';
 import * as Tone from 'tone';
 import { audioProps, audioPropsSetter } from './AudioProps';
 
 function Waveform(props: audioProps & audioPropsSetter) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
-    useEffect(() => {
+    const paintWaveform = useCallback(() => {
       const canvas = canvasRef.current;
       const context = canvas?.getContext('2d');
   
       if (!canvas || !context) return;
-  
+
       const { audioBuffer, offset } = props;
-      // Get waveform data from the first channel
+
+      // Get the waveform data from the audio buffer
       const data = audioBuffer.getChannelData(0);
+
+      if (!data) return;
   
       const width = canvas.offsetWidth;
       const height = canvas.offsetHeight;
@@ -37,7 +42,7 @@ function Waveform(props: audioProps & audioPropsSetter) {
       context.strokeStyle = '#fff';
   
       context.beginPath();
-  
+
       for (let i = 0; i < length; i++) {
         const x = i * sliceWidth;
         const y = (data[i] + 1) * (height - paddingTop - paddingBottom) * 0.5 + paddingTop;
@@ -49,15 +54,12 @@ function Waveform(props: audioProps & audioPropsSetter) {
         }
       }
       context.stroke();
+  }, []);
 
-      // Draw a line at the current time
-      context.beginPath();
-      context.lineWidth = 1;
-      context.strokeStyle = '#f00';
-      context.moveTo(offset / audioBuffer.duration * width, 0);
-      context.lineTo(offset / audioBuffer.duration * width, height);
-      context.stroke();
-  }, [props.audioBuffer, props.offset]);
+  useEffect(() => {
+    if (canvasRef.current)
+      paintWaveform();
+  }, [canvasRef]);
 
     return (
       <div className="waveform">
@@ -65,5 +67,4 @@ function Waveform(props: audioProps & audioPropsSetter) {
       </div>
     );
 }
-
 export default Waveform;

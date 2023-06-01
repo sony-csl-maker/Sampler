@@ -25,23 +25,32 @@ function Player(props : audioProps & audioPropsSetter) {
             Tone.Transport.scheduleRepeat(() => {
                 props.setOffset(Tone.Transport.seconds);
             }, 0.01)
-
-            
+ 
             // Set up envelope
             props.setEnvelope(new Tone.AmplitudeEnvelope({
                 attack: 0.1,
                 decay: 0.2,
                 sustain: 0.1,
-                release: 0.8,
+                release: 0.2,
             }).toDestination());
 
-            if (props.envelope !== null) {
-                player.connect(props.envelope);
-            }
     }, [player]);
+
+    // Set Envelope into Player if Envelope changes
+    useEffect(() => {
+        if (props.envelope === null || player === null)
+            return;
+        
+        player.connect(props.envelope);
+    }, [props.envelope]);
+
 
     // Onstop event to handle end of audio playback
     if (player !== null) {
+        const releaseTime = Tone.Time(props.envelope?.release).toSeconds();
+        if (props.offset >= player.buffer.duration - releaseTime) {
+            props.envelope?.triggerRelease();
+        }
         player.onstop = () => {
             if (props.offset >= player.buffer.duration) {
                 Tone.Transport.stop();
@@ -55,7 +64,7 @@ function Player(props : audioProps & audioPropsSetter) {
     const handleAudioSelected = () => {
         if (props.audioBuffer !== undefined) {
             Tone.start();
-            const newPlayer = new Tone.Player(props.audioBuffer).toDestination();
+            const newPlayer = new Tone.Player(props.audioBuffer);
 
             if (newPlayer.loaded) {
                 setPlayer(newPlayer);
@@ -72,12 +81,16 @@ function Player(props : audioProps & audioPropsSetter) {
     const handlePlayButtonClick = () => {
         if (player === null)
             return;
+
         if (state !== 'playing') {
             props.setOffset(Tone.Transport.seconds);
             Tone.Transport.start(undefined, props.offset);
             player.start(undefined, props.offset);
             setState('playing');
+            // use default parameter for triggerAttackRelease
+            props.envelope?.triggerAttack();
         }
+
     };
 
     const handleStopButtonClick = () => {
