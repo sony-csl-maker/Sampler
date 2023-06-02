@@ -32,16 +32,26 @@ function Player(props : audioProps & audioPropsSetter) {
                 decay: 0.2,
                 sustain: 0.1,
                 release: 0.2,
-            }).toDestination());
+            }));
+
+            props.setEqualizer(new Tone.EQ3({
+                low : 0,
+                mid : 0,
+                high : 0,
+                lowFrequency : 400,
+                highFrequency : 2500
+            }));
 
     }, [player]);
 
     // Set Envelope into Player if Envelope changes
     useEffect(() => {
-        if (props.envelope === null || player === null)
+        if (props.envelope === null || player === null || props.equalizer_three === null)
             return;
         
         player.connect(props.envelope);
+        props.envelope.connect(props.equalizer_three);
+        props.equalizer_three.toDestination();
     }, [props.envelope]);
 
 
@@ -81,14 +91,14 @@ function Player(props : audioProps & audioPropsSetter) {
     const handlePlayButtonClick = () => {
         if (player === null)
             return;
-
         if (state !== 'playing') {
             props.setOffset(Tone.Transport.seconds);
             Tone.Transport.start(undefined, props.offset);
             player.start(undefined, props.offset);
             setState('playing');
             // use default parameter for triggerAttackRelease
-            props.envelope?.triggerAttack();
+            if (props.offset === 0 && props.envelope !== null)
+                props.envelope.triggerAttack();
         }
 
     };
@@ -109,6 +119,9 @@ function Player(props : audioProps & audioPropsSetter) {
             Tone.Transport.pause();
             setState('paused');
         }
+        console.log(props.equalizer_three?.highFrequency.value);
+        console.log(props.equalizer_three?.lowFrequency.value);
+        console.log(props.equalizer_three?.high.value);
     };
 
     const handleRemoveClick = () => {
