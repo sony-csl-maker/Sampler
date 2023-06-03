@@ -1,11 +1,8 @@
-import {useEffect, useRef, useState, useCallback, useMemo} from 'react';
-import * as Tone from 'tone';
+import {useEffect, useRef, useCallback} from 'react';
 import { audioProps, audioPropsSetter } from './AudioProps';
 
 function Waveform(props: audioProps & audioPropsSetter) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
 
     const paintWaveform = useCallback(() => {
       const canvas = canvasRef.current;
@@ -13,7 +10,7 @@ function Waveform(props: audioProps & audioPropsSetter) {
   
       if (!canvas || !context) return;
 
-      const { audioBuffer, offset } = props;
+      const { audioBuffer } = props;
 
       // Get the waveform data from the audio buffer
       const data = audioBuffer.getChannelData(0);
