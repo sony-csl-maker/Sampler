@@ -6,8 +6,8 @@ import { audioProps, audioPropsSetter } from './AudioProps';
 function Player(props : audioProps & audioPropsSetter) {
     const [player, setPlayer] = useState<Tone.Player | null>(null);
     const [state, setState] = useState<'playing' | 'paused' | 'stopped'>('stopped');
-    const { audioBuffer, offset, envelope, equalizer_three, 
-            setAudioBuffer, setOffset, setEnvelope, setEqualizer } = props;
+    const { audioBuffer, offset, envelope, equalizer_three, startTime, endTime,
+            setAudioBuffer, setOffset, setEnvelope, setEqualizer, setStartTime, setEndTime } = props;
 
     // Set Audio Buffer into Player if Audio Buffer changes
     useEffect(() => {
@@ -30,17 +30,14 @@ function Player(props : audioProps & audioPropsSetter) {
             if (player === null)
                 return;
 
-            // // Set up waveform
-            // const newWaveform = new Tone.Waveform(1024);
-            // player.connect(newWaveform);
-            // setWaveform(newWaveform);
-
             // Set up transport event to update offset in real-time
             // return the event id so that it can be cancelled
             Tone.Transport.scheduleRepeat(() => {
                 setOffset(Tone.Transport.seconds);
             }, 0.01)
- 
+
+            // Set end time to the duration of the audio (default)
+            setEndTime(player.buffer.duration);
             // Set up envelope
             setEnvelope(new Tone.AmplitudeEnvelope({
                 attack: 0.1,
@@ -57,7 +54,6 @@ function Player(props : audioProps & audioPropsSetter) {
                 lowFrequency : 400,
                 highFrequency : 2500
             }));
-
     }, [player, setOffset, setEnvelope, setEqualizer]);
 
     // Set Envelope and EQ3 to Player
@@ -70,21 +66,19 @@ function Player(props : audioProps & audioPropsSetter) {
         equalizer_three.toDestination();
     }, [envelope, player, equalizer_three]);
 
+        // Onstop event to handle end of audio playback
+        useEffect(() => {
+            const releaseTime = Tone.Time(envelope?.release).toSeconds();
+            if (offset >= endTime - releaseTime) {
+                envelope?.triggerRelease();
+            }
 
-    // Onstop event to handle end of audio playback
-    if (player !== null) {
-        const releaseTime = Tone.Time(envelope?.release).toSeconds();
-        if (offset >= player.buffer.duration - releaseTime) {
-            envelope?.triggerRelease();
-        }
-        player.onstop = () => {
-            if (offset >= player.buffer.duration) {
+            if (offset >= endTime) {
                 Tone.Transport.stop();
-                setOffset(0);
+                setOffset(startTime);
                 setState('stopped');
             }
-        }
-    }
+        }, [offset, endTime, setOffset, startTime]);
 
     // Play, Pause, Stop, Remove audio
     const handlePlayButtonClick = () => {
@@ -106,7 +100,7 @@ function Player(props : audioProps & audioPropsSetter) {
       if (player !== null) {
         Tone.Transport.stop();
         player.stop();
-        setOffset(0);
+        setOffset(startTime);
         setState('stopped');
       }
     };
@@ -118,9 +112,6 @@ function Player(props : audioProps & audioPropsSetter) {
             Tone.Transport.pause();
             setState('paused');
         }
-        console.log(equalizer_three?.highFrequency.value);
-        console.log(equalizer_three?.lowFrequency.value);
-        console.log(equalizer_three?.high.value);
     };
 
     const handleRemoveClick = () => {

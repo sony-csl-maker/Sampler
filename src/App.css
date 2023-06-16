@@ -10,7 +10,7 @@ body {
   position: fixed;
   width:100%;
   top: 0;
-  padding: 20px;
+  padding: 0px;
   text-align: center;
   background: rgba(19,28,43,255);
   color: white;
@@ -21,7 +21,7 @@ body {
   position: fixed;
   width:100%;
   bottom: 0;
-  padding: 20px;
+  padding: 0px;
   text-align: center;
   background: rgba(19,28,43,255);
   color: white;
@@ -30,10 +30,10 @@ body {
 
 .audioPlayer {
   position: 'relative';
-  margin-top: 300px;
+  margin-top: 50px;
 }
 
 .audioUploader {
   position: 'relative';
-  margin-top: 300px;
+  margin-top: 250px;
 }
