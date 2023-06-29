@@ -36,7 +36,8 @@ function App() {
                         startTime={startTime} setStartTime={setStartTime}
                         endTime={endTime} setEndTime={setEndTime}
                         />
-              <ADSREnvelope envelope={envelope} setEnvelope={setEnvelope}/>
+              <ADSREnvelope envelope={envelope} setEnvelope={setEnvelope}
+                            audioBuffer={audioBuffer}/>
               <EqualizerThree equalizer_three={equalizer_three} setEqualizer={setEqualizer}/>
                             </div>
                           ) : ( <div className='audioUploader'>

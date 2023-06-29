@@ -37,6 +37,7 @@ function Player(props : audioProps & audioPropsSetter) {
             }, 0.01)
 
             // Set end time to the duration of the audio (default)
+            setOffset(startTime)
             setEndTime(player.buffer.duration);
             // Set up envelope
             setEnvelope(new Tone.AmplitudeEnvelope({
@@ -66,26 +67,30 @@ function Player(props : audioProps & audioPropsSetter) {
         equalizer_three.toDestination();
     }, [envelope, player, equalizer_three]);
 
-        // Onstop event to handle end of audio playback
-        useEffect(() => {
-            const releaseTime = Tone.Time(envelope?.release).toSeconds();
-            if (offset >= endTime - releaseTime) {
-                envelope?.triggerRelease();
-            }
+    // Onstop event to handle end of audio playback
+    useEffect(() => {
+        const releaseTime = Tone.Time(envelope?.release).toSeconds();
+        if (offset >= endTime - releaseTime) {
+            envelope?.triggerRelease();
+        }
 
-            if (offset >= endTime) {
-                Tone.Transport.stop();
-                setOffset(startTime);
-                setState('stopped');
-            }
-        }, [offset, endTime, setOffset, startTime]);
+        if (offset >= endTime) {
+            Tone.Transport.stop();
+            setOffset(startTime);
+            setState('stopped');
+        }
+    }, [offset, endTime, envelope?.release, startTime]);
+
+    // useEffect(() => {
+    //     setOffset(startTime);
+    // }, [startTime]);   
 
     // Play, Pause, Stop, Remove audio
     const handlePlayButtonClick = () => {
         if (player === null)
             return;
         if (state !== 'playing') {
-            setOffset(Tone.Transport.seconds);
+            //setOffset(Tone.Transport.seconds);
             Tone.Transport.start(undefined, offset);
             player.start(undefined, offset);
             setState('playing');

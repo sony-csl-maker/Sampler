@@ -5,6 +5,7 @@ import Sketch from 'react-p5';
 interface ADSREnvelopeProps {
   envelope: Tone.AmplitudeEnvelope | null;
   setEnvelope: React.Dispatch<React.SetStateAction<Tone.AmplitudeEnvelope | null>>;
+  audioBuffer: AudioBuffer;
 }
 
 interface coordinates {
@@ -12,7 +13,7 @@ interface coordinates {
   y: number;
 }
 
-function ADSREnvelope({ envelope, setEnvelope }: ADSREnvelopeProps) {
+function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps) {
 
   useEffect(() => {
     // define a custom handler function
@@ -154,11 +155,11 @@ function ADSREnvelope({ envelope, setEnvelope }: ADSREnvelopeProps) {
     <div>
       <div>
         <label>Attack Time:</label>
-        <input type="range" min="0" max="1" step="0.01" value={attackTime} onChange={(e) => handleAttackChange(parseFloat(e.target.value))} />
+        <input type="range" min="0" max={audioBuffer.duration} step="0.01" value={attackTime} onChange={(e) => handleAttackChange(parseFloat(e.target.value))} />
       </div>
       <div>
         <label>Decay Time:</label>
-        <input type="range" min="0" max="1" step="0.01" value={decayTime} onChange={(e) => handleDecayChange(parseFloat(e.target.value))} />
+        <input type="range" min="0" max={audioBuffer.duration} step="0.01" value={decayTime} onChange={(e) => handleDecayChange(parseFloat(e.target.value))} />
       </div>
       <div>
         <label>Sustain Level:</label>
