@@ -1,0 +1,17 @@
+.helper-text-container-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36rem;
+    height: auto;
+    border-radius: 10px;
+    background-color: var(--blue);
+    position: absolute;
+    top: 89%;
+    right: 1rem;
+    z-index: 6;
+    color: white;
+    box-sizing: border-box;
+    padding: 2rem;
+    text-align: start;
+}
