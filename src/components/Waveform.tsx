@@ -1,9 +1,13 @@
 import {useEffect, useRef, useState, useMemo} from 'react';
 import { audioProps, audioPropsSetter } from './AudioProps';
+import RotarySlider from './RotarySliderContainer/RotarySlider';
+import "./Component.css";
 
 function Waveform(props: audioProps & audioPropsSetter) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [offsetPosX, setOffsetPosX] = useState(0);
+    const [reversed, setReversed] = useState(false);
+    const [pitch, setPitch] = useState(0);
 
     const drawBuffer = useMemo(() => () => {
       const canvas = canvasRef.current;
@@ -104,12 +108,50 @@ function Waveform(props: audioProps & audioPropsSetter) {
       props.setEndTime(newEndTime);
     };
 
+    const handleReverse = () => {
+      if (props.player === null)
+        return;
+      setReversed(!reversed);
+    };
+
+    useEffect(() => {
+      if (props.player === null)
+        return;
+        console.log(reversed);
+      props.player.reverse = reversed;
+    }, [reversed]);
+
+    const handlePitchChange = (value : number) => {
+      if (props.pitchShift === null) return;
+      setPitch(value);
+      props.pitchShift.pitch = value;
+    };
+
     return (
       <div>
         <canvas ref={canvasRef} height={100} width={700} />
+        <label>Reverse</label>
+        <input type="checkbox" checked={reversed} onChange={handleReverse}/>
+
+        <div className="knob">
+
+          <div className="individual-knob">
+          <p className='element-name'>Pitch</p>
+              <RotarySlider
+                value={pitch}
+                onChange={handlePitchChange}
+                size={1}
+                type="Kick"
+                showGauge={true}
+                showHand={true}
+                onChangeEnd={handlePitchChange}
+                maxValue={12}
+              />
+            </div>
+          </div>
         <div>
         Start Time:
-        <input type="number" value={props.startTime} onChange={handleStartTimeChange} />
+        <input type="number" value={props.startTime} checked={reversed} onChange={handleStartTimeChange} />
       </div>
         <div>
           End Time:
