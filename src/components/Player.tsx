@@ -4,9 +4,9 @@ import styles from './Player.module.css';
 import { audioProps, audioPropsSetter } from './AudioProps';
 
 function Player(props : audioProps & audioPropsSetter) {
-    const [player, setPlayer] = useState<Tone.Player | null>(null);
     const [state, setState] = useState<'playing' | 'paused' | 'stopped'>('stopped');
     const { audioBuffer, offset, envelope, equalizer_three, startTime, endTime,
+            pitchShift, setPitchShift, player, setPlayer,
             setAudioBuffer, setOffset, setEnvelope, setEqualizer, setStartTime, setEndTime } = props;
 
     // Set Audio Buffer into Player if Audio Buffer changes
@@ -55,16 +55,22 @@ function Player(props : audioProps & audioPropsSetter) {
                 lowFrequency : 400,
                 highFrequency : 2500
             }));
+
+            setPitchShift(new Tone.PitchShift({
+                pitch: 0,
+            }));
+
     }, [player, setOffset, setEnvelope, setEqualizer]);
 
     // Set Envelope and EQ3 to Player
     useEffect(() => {
-        if (envelope === null || player === null || equalizer_three === null)
+        if (envelope === null || player === null || equalizer_three === null || pitchShift === null)
             return;
         
         player.connect(envelope);
         envelope.connect(equalizer_three);
-        equalizer_three.toDestination();
+        equalizer_three.connect(pitchShift);
+        pitchShift.toDestination();
     }, [envelope, player, equalizer_three]);
 
     // Onstop event to handle end of audio playback

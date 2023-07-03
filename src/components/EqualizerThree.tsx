@@ -1,5 +1,7 @@
 import {useEffect, useState} from 'react';
 import * as Tone from 'tone';
+import RotarySlider from './RotarySliderContainer/RotarySlider';
+import "./Component.css";
 
 interface EqualizerThreeProps {
     equalizer_three: Tone.EQ3 | null;
@@ -24,56 +26,94 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
         equalizer_three.highFrequency.value = highFrequency;
     }, [low, mid, high, lowFrequency, highFrequency, equalizer_three]);
 
+    const handleLowChange = (nb: number) => {
+        setLow(nb);
+    };
+
+    const handleMidChange = (nb: number) => {
+        setMid(nb);
+    };
+
+    const handleHighChange = (nb: number) => {
+        setHigh(nb);
+    };
+
+    const handleLowFrequencyChange = (nb: number) => {
+        setLowFrequency(nb);
+    };
+
+    const handleHighFrequencyChange = (nb: number) => {
+        setHighFrequency(nb);
+    };
+
     return (
     <div>
-        <div>
-            <label>Low</label>
-            <input
-            type="range"
-            min="-12"
-            max="12"
-            value={low}
-            onChange={(e) => setLow(Number(e.target.value))}
-            />
+        <h1 className='title'>Equalizer</h1>
+        <div className="knob">
+        <div className="individual-knob">
+            <p className='element-name'>Low</p>
+                <RotarySlider
+                    value={low}
+                    onChange={handleLowChange}
+                    size={1}
+                    type="Kick"
+                    showGauge={true}
+                    showHand={true}
+                    onChangeEnd={handleLowChange}
+                    maxValue={12}
+                />
         </div>
-        <div>
-            <label>Mid</label>
-            <input
-            type="range"
-            min="-12"
-            max="12"
-            value={mid}
-            onChange={(e) => setMid(Number(e.target.value))}
-            />
+        <div className="individual-knob">
+            <p className='element-name'>Mid</p>
+                <RotarySlider
+                    value={mid}
+                    onChange={handleMidChange}
+                    size={1}
+                    type="Kick"
+                    showGauge={true}
+                    showHand={true}
+                    onChangeEnd={handleMidChange}
+                    maxValue={12}
+                />
         </div>
-        <div>
-            <label>High</label>
-            <input
-            type="range"
-            min="-12"
-            max="12"
-            value={high}
-            onChange={(e) => setHigh(Number(e.target.value))}
-            />
+        <div className="individual-knob">
+            <p className='element-name'>High</p>
+                <RotarySlider
+                    value={high}
+                    onChange={handleHighChange}
+                    size={1}
+                    type="Kick"
+                    showGauge={true}
+                    showHand={true}
+                    onChangeEnd={handleHighChange}
+                    maxValue={12}
+                />
         </div>
-        <div>
-            <label>Low Frequency</label>
-            <input
-            type="range"
-            min="0"
-            max="1000"
-            value={lowFrequency}
-            onChange={(e) => setLowFrequency(Number(e.target.value))}
-            />
-        <div>
-            <label>High Frequency</label>
-            <input
-            type="range"
-            min="1000"
-            max="5000"
-            value={highFrequency}
-            onChange={(e) => setHighFrequency(Number(e.target.value))}
-            />
+        <div className="individual-knob">
+            <p className='element-name'>Low Frequency</p>
+                <RotarySlider
+                    value={lowFrequency}
+                    onChange={handleLowFrequencyChange}
+                    size={1}
+                    type="Kick"
+                    showGauge={true}
+                    showHand={true}
+                    onChangeEnd={handleLowFrequencyChange}
+                    maxValue={1000}
+                />
+        </div>
+        <div className="individual-knob">
+            <p className='element-name'>High Frequency</p>
+                <RotarySlider
+                    value={highFrequency}
+                    onChange={handleHighFrequencyChange}
+                    size={1}
+                    type="Kick"
+                    showGauge={true}
+                    showHand={true}
+                    onChangeEnd={handleHighFrequencyChange}
+                    maxValue={5000}
+                />
         </div>
         </div>
     </div>

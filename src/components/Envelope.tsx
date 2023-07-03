@@ -1,6 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, SetStateAction } from 'react';
 import * as Tone from 'tone';
 import Sketch from 'react-p5';
+import RotarySliderContainer from "./RotarySliderContainer/RotarySliderContainer";
+import { KSCSliderState, KSCSliderStateInitialValue } from "../types/KSCSliderState";
+import RotarySlider from './RotarySliderContainer/RotarySlider';
+import "./Component.css";
 
 interface ADSREnvelopeProps {
   envelope: Tone.AmplitudeEnvelope | null;
@@ -68,7 +72,7 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
   const drawPoints = (p5: any, points: coordinates[]) => {
     for (let i = 0; i < points.length; i++) {
       p5.strokeWeight(5);
-      p5.stroke(255, 0, 0);
+      p5.stroke("#197FD2");
       p5.point(points[i].x, points[i].y);
     }
   };
@@ -78,9 +82,9 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
   };
 
   const draw = (p5: any) => {
-    p5.background(255);
+    p5.background("#28272c");
     p5.noFill();
-    p5.stroke(0);
+    p5.stroke(255);
     drawCurve(p5, points);
     drawPoints(p5, points);
 
@@ -151,25 +155,73 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
     envelope.release = value;
   };
 
+
+  const setKSCSliderState = (value: SetStateAction<KSCSliderState>) => {
+  };
+
   return (
     <div>
-      <div>
-        <label>Attack Time:</label>
-        <input type="range" min="0" max={audioBuffer.duration} step="0.01" value={attackTime} onChange={(e) => handleAttackChange(parseFloat(e.target.value))} />
-      </div>
-      <div>
-        <label>Decay Time:</label>
-        <input type="range" min="0" max={audioBuffer.duration} step="0.01" value={decayTime} onChange={(e) => handleDecayChange(parseFloat(e.target.value))} />
-      </div>
-      <div>
-        <label>Sustain Level:</label>
-        <input type="range" min="0" max="1" step="0.01" value={sustainLevel} onChange={(e) => handleSustainChange(parseFloat(e.target.value))} />
-      </div>
-      <div>
-        <label>Release Time:</label>
-        <input type="range" min="0" max="1" step="0.01" value={releaseTime} onChange={(e) => handleReleaseChange(parseFloat(e.target.value))} />
-      </div>
+      <h1 className="title">Envelope</h1>
       <Sketch setup={setup} draw={draw}/>
+
+      <div className="knob">
+
+      <div className="individual-knob">
+      <p className='element-name'>Attack</p>
+          <RotarySlider
+            value={attackTime}
+            onChange={handleAttackChange}
+            size={1}
+            type="Kick"
+            showGauge={true}
+            showHand={true}
+            onChangeEnd={handleAttackChange}
+            maxValue={audioBuffer.duration}
+          />
+        </div>
+
+      <div className="individual-knob">
+        <p className='element-name'>Decay</p>
+          <RotarySlider
+            value={decayTime}
+            onChange={handleDecayChange}
+            size={1}
+            type="Kick"
+            showGauge={true}
+            showHand={true}
+            onChangeEnd={handleDecayChange}
+            maxValue={audioBuffer.duration}
+          />
+      </div>
+
+      <div className="individual-knob">
+      <p className='element-name'>Sustain</p>
+          <RotarySlider
+            value={sustainLevel}
+            onChange={handleSustainChange}
+            size={1}
+            type="Kick"
+            showGauge={true}
+            showHand={true}
+            onChangeEnd={handleSustainChange}
+            maxValue={1}
+          />
+        </div>
+
+      <div className="individual-knob">
+      <p className='element-name'>Release</p>
+          <RotarySlider
+            value={releaseTime}
+            onChange={handleReleaseChange}
+            size={1}
+            type="Kick"
+            showGauge={true}
+            showHand={true}
+            onChangeEnd={handleReleaseChange}
+            maxValue={1}
+          />
+          </div>
+        </div>
     </div>
   );
 }

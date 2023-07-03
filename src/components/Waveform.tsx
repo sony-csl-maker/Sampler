@@ -58,7 +58,7 @@ function Waveform(props: audioProps & audioPropsSetter) {
       const offsetWidth = offset * width / audioBuffer.duration;
       setOffsetPosX(offsetWidth);
 
-      context.fillStyle = "red";
+      context.fillStyle = "#197FD2";
       context.fillRect(offsetPosX, 0, 1, height);
 
     }
