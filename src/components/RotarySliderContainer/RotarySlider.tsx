@@ -15,6 +15,7 @@ interface RotarySliderProps {
   showGauge: boolean;
   showHand: boolean;
   onChangeEnd: (value: number) => void;
+  minValue: number;
   maxValue: number;
 }
 
@@ -26,6 +27,7 @@ const RotarySlider: FC<RotarySliderProps> = ({
   showGauge,
   showHand,
   onChangeEnd,
+  minValue,
   maxValue
 }) => {
   const [rotation, setRotation] = useState(0);
@@ -37,7 +39,7 @@ const RotarySlider: FC<RotarySliderProps> = ({
   const [isSliding, setIsSliding] = useState<boolean>(false);
 
   useEffect(() => {
-    const rotation = localValue * (100 / maxValue) * 2.6 - 130; // Calculate the rotation angle for the marker
+    const rotation = localValue * (100 / maxValue) * 2.6 - 130;
     setRotation(rotation);
   }, [localValue]);
 
@@ -58,10 +60,10 @@ const RotarySlider: FC<RotarySliderProps> = ({
     let newValue = Math.round((degrees + 180) / 2.6);
     const rotation = localValue * 2.6 - 120;
 
-    if (newValue < 0) newValue = 0;
+    if (newValue < minValue) newValue = minValue;
     if (newValue > maxValue && value < Infinity) {
-      if (rotation < 0) {
-        newValue = 0;
+      if (rotation < minValue) {
+        newValue = minValue;
       } else {
         newValue = maxValue;
       }
@@ -109,7 +111,7 @@ const RotarySlider: FC<RotarySliderProps> = ({
       }}
     >
       {showGauge ? (
-        <RotarySliderGauge value={localValue} onChange={onChange} size={size} maxValue={maxValue} />
+        <RotarySliderGauge value={localValue} onChange={onChange} size={size} minValue={minValue} maxValue={maxValue} />
       ) : (
         <div className={"rotary-slider-doted-gauge"}>{gaugeDots}</div>
       )}
@@ -143,6 +145,7 @@ const RotarySlider: FC<RotarySliderProps> = ({
 
             onChange={onChange}
             onChangeEnd={onChangeEnd}
+            minValue={minValue}
             maxValue={maxValue}
           />
         </div>

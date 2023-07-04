@@ -137,6 +137,7 @@ function Waveform(props: audioProps & audioPropsSetter) {
 
           <div className="individual-knob">
           <p className='element-name'>Pitch</p>
+              <p className='element-name'>{pitch}</p>
               <RotarySlider
                 value={pitch}
                 onChange={handlePitchChange}
@@ -145,6 +146,7 @@ function Waveform(props: audioProps & audioPropsSetter) {
                 showGauge={true}
                 showHand={true}
                 onChangeEnd={handlePitchChange}
+                minValue={-12}
                 maxValue={12}
               />
             </div>

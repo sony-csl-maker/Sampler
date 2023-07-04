@@ -168,6 +168,7 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
 
       <div className="individual-knob">
       <p className='element-name'>Attack</p>
+      <p className='element-name'>{attackTime.toFixed(2)} ms</p>
           <RotarySlider
             value={attackTime}
             onChange={handleAttackChange}
@@ -176,12 +177,14 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
             showGauge={true}
             showHand={true}
             onChangeEnd={handleAttackChange}
+            minValue={0}
             maxValue={audioBuffer.duration}
           />
         </div>
 
       <div className="individual-knob">
         <p className='element-name'>Decay</p>
+        <p className='element-name'>{decayTime.toFixed(2)} ms</p>
           <RotarySlider
             value={decayTime}
             onChange={handleDecayChange}
@@ -190,12 +193,14 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
             showGauge={true}
             showHand={true}
             onChangeEnd={handleDecayChange}
+            minValue={0}
             maxValue={audioBuffer.duration}
           />
       </div>
 
       <div className="individual-knob">
       <p className='element-name'>Sustain</p>
+          <p className='element-name'>{sustainLevel.toFixed(2)}</p>
           <RotarySlider
             value={sustainLevel}
             onChange={handleSustainChange}
@@ -204,12 +209,14 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
             showGauge={true}
             showHand={true}
             onChangeEnd={handleSustainChange}
+            minValue={0}
             maxValue={1}
           />
         </div>
 
       <div className="individual-knob">
       <p className='element-name'>Release</p>
+          <p className='element-name'>{releaseTime.toFixed(2)} ms</p>
           <RotarySlider
             value={releaseTime}
             onChange={handleReleaseChange}
@@ -218,6 +225,7 @@ function ADSREnvelope({ envelope, setEnvelope, audioBuffer }: ADSREnvelopeProps)
             showGauge={true}
             showHand={true}
             onChangeEnd={handleReleaseChange}
+            minValue={0}
             maxValue={1}
           />
           </div>

@@ -116,6 +116,7 @@ const RotarySliderContainer: FC<RotarySliderContainerProps> = ({
             size={1}
             showGauge={true}
             showHand={true}
+            minValue={0}
             maxValue={2}
           />
         </div>

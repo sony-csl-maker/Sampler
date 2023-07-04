@@ -52,6 +52,8 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
         <div className="knob">
         <div className="individual-knob">
             <p className='element-name'>Low</p>
+            {/* Display low value */}
+            <p className='element-name'>{low.toFixed(2)}</p>
                 <RotarySlider
                     value={low}
                     onChange={handleLowChange}
@@ -60,11 +62,14 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
                     showGauge={true}
                     showHand={true}
                     onChangeEnd={handleLowChange}
+                    minValue={-12}
                     maxValue={12}
                 />
         </div>
         <div className="individual-knob">
             <p className='element-name'>Mid</p>
+            {/* Display mid value */}
+            <p className='element-name'>{mid.toFixed(2)}</p>
                 <RotarySlider
                     value={mid}
                     onChange={handleMidChange}
@@ -73,11 +78,14 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
                     showGauge={true}
                     showHand={true}
                     onChangeEnd={handleMidChange}
+                    minValue={0}
                     maxValue={12}
                 />
         </div>
         <div className="individual-knob">
             <p className='element-name'>High</p>
+            {/* Display high value */}
+            <p className='element-name'>{high.toFixed(2)}</p>
                 <RotarySlider
                     value={high}
                     onChange={handleHighChange}
@@ -86,11 +94,14 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
                     showGauge={true}
                     showHand={true}
                     onChangeEnd={handleHighChange}
+                    minValue={-12}
                     maxValue={12}
                 />
         </div>
         <div className="individual-knob">
             <p className='element-name'>Low Frequency</p>
+            {/* Display high value */}
+            <p className='element-name'>{lowFrequency.toFixed(2)}</p>
                 <RotarySlider
                     value={lowFrequency}
                     onChange={handleLowFrequencyChange}
@@ -99,11 +110,14 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
                     showGauge={true}
                     showHand={true}
                     onChangeEnd={handleLowFrequencyChange}
+                    minValue={20}
                     maxValue={1000}
                 />
         </div>
         <div className="individual-knob">
             <p className='element-name'>High Frequency</p>
+            {/* Display high value */}
+            <p className='element-name'>{highFrequency.toFixed(2)}</p>
                 <RotarySlider
                     value={highFrequency}
                     onChange={handleHighFrequencyChange}
@@ -112,6 +126,7 @@ function EqualizerThree({ equalizer_three, setEqualizer }: EqualizerThreeProps) 
                     showGauge={true}
                     showHand={true}
                     onChangeEnd={handleHighFrequencyChange}
+                    minValue={1000}
                     maxValue={5000}
                 />
         </div>

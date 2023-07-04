@@ -8,10 +8,11 @@ interface RotarySliderGaugeProps {
   onChange: (value: number) => void;
 
   size: number;
+  minValue: number;
   maxValue: number;
 }
 
-const RotarySliderGauge: FC<RotarySliderGaugeProps> = ({ value, onChange, size, maxValue }) => {
+const RotarySliderGauge: FC<RotarySliderGaugeProps> = ({ value, onChange, size, minValue, maxValue }) => {
 
   const handleChange = (value: number) => {
     onChange(value);
@@ -21,7 +22,7 @@ const RotarySliderGauge: FC<RotarySliderGaugeProps> = ({ value, onChange, size, 
     <div className="rotary-slider-gauge" >
       <CircularSlider
         size={138 * size}
-        minValue={0}
+        minValue={minValue}
         maxValue={maxValue}
         startAngle={40}
         endAngle={320}

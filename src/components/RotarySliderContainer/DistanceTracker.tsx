@@ -8,6 +8,7 @@ interface DistanceTrackerProps {
 
   onChange: (value: number) => void;
   onChangeEnd: (value: number) => void;
+  minValue: number;
   maxValue: number;
 }
 
@@ -19,6 +20,7 @@ const DistanceTracker: FC<DistanceTrackerProps> = ({
 
   onChange,
   onChangeEnd,
+  minValue,
   maxValue,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -48,12 +50,12 @@ const DistanceTracker: FC<DistanceTrackerProps> = ({
 
       if (currentY > startY) {
 
-        const sliderValue = (localValue - acceleratedMovement > maxValue ? maxValue : localValue - acceleratedMovement < 0 ? 0 : localValue - acceleratedMovement)
+        const sliderValue = (localValue - acceleratedMovement > maxValue ? maxValue : localValue - acceleratedMovement < minValue ? minValue : localValue - acceleratedMovement)
 
         setDistance(calculatedDistance);
         onChange(sliderValue);
       } else {
-        const sliderValue = (localValue + acceleratedMovement > maxValue ? maxValue : localValue + acceleratedMovement < 0 ? 0 : localValue + acceleratedMovement)
+        const sliderValue = (localValue + acceleratedMovement > maxValue ? maxValue : localValue + acceleratedMovement < minValue ? minValue : localValue + acceleratedMovement)
 
         setDistance(calculatedDistance);
         onChange(sliderValue);
