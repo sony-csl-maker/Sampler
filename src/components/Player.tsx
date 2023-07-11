@@ -41,7 +41,7 @@ function Player(props : audioProps & audioPropsSetter) {
             setEndTime(player.buffer.duration);
             // Set up envelope
             setEnvelope(new Tone.AmplitudeEnvelope({
-                attack: 0.1,
+                attack: 0,
                 decay: 0.2,
                 sustain: 0.1,
                 release: 0.2,
@@ -87,16 +87,11 @@ function Player(props : audioProps & audioPropsSetter) {
         }
     }, [offset, endTime, envelope?.release, startTime]);
 
-    // useEffect(() => {
-    //     setOffset(startTime);
-    // }, [startTime]);   
-
     // Play, Pause, Stop, Remove audio
     const handlePlayButtonClick = () => {
         if (player === null)
             return;
         if (state !== 'playing') {
-            //setOffset(Tone.Transport.seconds);
             Tone.Transport.start(undefined, offset);
             player.start(undefined, offset);
             setState('playing');
@@ -104,7 +99,6 @@ function Player(props : audioProps & audioPropsSetter) {
             if (offset === 0 && envelope !== null)
                 envelope.triggerAttack();
         }
-
     };
 
     const handleStopButtonClick = () => {

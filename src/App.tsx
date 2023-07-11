@@ -6,6 +6,7 @@ import Player from './components/Player';
 import Waveform from './components/Waveform';
 import ADSREnvelope from "./components/Envelope"
 import EqualizerThree from './components/EqualizerThree';
+import ADSREnvelopeCurve from './components/EnvelopeCurve';
 
 function App() {
   const [player, setPlayer] = useState<Tone.Player | null>(null);
@@ -42,13 +43,16 @@ function App() {
                         endTime={endTime} setEndTime={setEndTime}
                         pitchShift={pitchShift} setPitchShift={setPitchShift}
                         />
-              <ADSREnvelope envelope={envelope} setEnvelope={setEnvelope}
-                            audioBuffer={audioBuffer}/>
+              <ADSREnvelopeCurve envelope={envelope} setEnvelope={setEnvelope} audioBuffer={audioBuffer}/>
+              {/* <ADSREnvelope envelope={envelope} setEnvelope={setEnvelope}
+                            audioBuffer={audioBuffer} initialPoints={points}
+                            attack={attack} setAttack={setAttack}
+                            decay={decay} sustain={sustain} release={release}/> */}
               <EqualizerThree equalizer_three={equalizer_three} setEqualizer={setEqualizer}/>
                             </div>
-                          ) : ( <div className='audioUploader'>
-              <AudioUploader onAudioSelected={setAudioBuffer}/>
-                                </div>
+                          ) : ( <><div className='audioUploader'>
+            <AudioUploader onAudioSelected={setAudioBuffer} />
+          </div></>
                           )
         }
     </div>

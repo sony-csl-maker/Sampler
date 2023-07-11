@@ -24,4 +24,15 @@ interface audioPropsSetter {
     setEndTime: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export type { audioProps, audioPropsSetter };
+
+interface coordinates {
+    x: number;
+    y: number;
+};
+interface ADSREnvelopeProps {
+    envelope: Tone.AmplitudeEnvelope | null;
+    setEnvelope: React.Dispatch<React.SetStateAction<Tone.AmplitudeEnvelope | null>>;
+    audioBuffer: AudioBuffer;
+};
+
+export type { audioProps, audioPropsSetter, ADSREnvelopeProps, coordinates };
